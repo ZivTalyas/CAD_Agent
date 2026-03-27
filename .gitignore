@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+
+# CAD outputs
+backend/outputs/*.step
+backend/outputs/*.stl
+backend/outputs/*.dxf
+
+# Node
+node_modules/
+frontend/dist/
+
+# Env
+.env
