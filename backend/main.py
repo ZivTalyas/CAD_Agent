@@ -173,7 +173,7 @@ async def reject_request(request_id: str, _: dict = Depends(require_admin)):
 async def generate(
     description: str = Form(...),
     image: Optional[UploadFile] = File(default=None),
-    _user: dict = Depends(require_user),
+    # _user: dict = Depends(require_user),  # auth bypassed
 ):
     image_bytes = await image.read() if image else None
 
