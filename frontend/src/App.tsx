@@ -10,7 +10,10 @@ import { loadAuth, clearAuth, type AuthState } from "./auth";
 import "./App.css";
 
 export default function App() {
-  const [auth, setAuth] = useState<AuthState | null>(loadAuth);
+  const [auth, setAuth] = useState<AuthState | null>(
+    // loadAuth() ?? { token: "", role: "user", name: "Dev" }  // bypass auth
+    { token: "", role: "user", name: "Dev" }
+  );
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<GenerateResult | null>(null);
   const [error, setError] = useState("");
