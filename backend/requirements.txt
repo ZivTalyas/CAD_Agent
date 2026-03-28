@@ -3,3 +3,8 @@ uvicorn[standard]==0.29.0
 python-multipart==0.0.9
 anthropic==0.28.0
 cadquery==2.4.0
+motor==3.4.0
+pymongo==4.7.2
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+python-dotenv==1.0.1

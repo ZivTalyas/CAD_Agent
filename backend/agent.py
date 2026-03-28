@@ -14,7 +14,7 @@ Rules:
 - Keep the code simple and correct — do not use unsupported CadQuery features."""
 
 
-def generate_cad_code(description: str, image_bytes: bytes | None = None) -> str:
+def generate_cad_code(description: str, image_bytes: "bytes | None" = None) -> str:
     client = anthropic.Anthropic()
 
     user_content: list = []

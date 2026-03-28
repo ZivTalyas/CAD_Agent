@@ -1,0 +1,44 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/ziv1t/AppData/Local/Programs/Python//**)",
+      "Bash(ls /c/Python*)",
+      "Read(//c/Users/ziv1t/**)",
+      "Bash(PYTHON=\"/c/Users/ziv1t/AppData/Local/Programs/Python/Python39/python.exe\")",
+      "Bash(\"$PYTHON\" --version)",
+      "Bash(\"$PYTHON\" -m venv .venv)",
+      "Bash(source .venv/Scripts/activate)",
+      "Bash(pip install:*)",
+      "Bash(python -c \":*)",
+      "Bash(grep:*)",
+      "Bash(set -a)",
+      "Bash(source .env)",
+      "Bash(set +a)",
+      "Bash(python -c \"import main; print\\(''All imports OK''\\)\")",
+      "Bash(uvicorn main:app --reload)",
+      "Bash(npm install:*)",
+      "Bash(npm run:*)",
+      "Bash(curl -s http://localhost:8000/docs)",
+      "Bash(curl -s http://localhost:8000/)",
+      "Bash(curl -s http://localhost:5173/)",
+      "Bash(uvicorn main:app --reload --port 8000)",
+      "Bash(start cmd:*)",
+      "Skill(update-config)",
+      "Bash(python3:*)"
+    ]
+  },
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd /c/Users/ziv1t/projects/claude/CAD_Agent && git diff --quiet HEAD 2>/dev/null && exit 0; git add -A -- ':!backend/.env' ':!*.step' ':!*.stl' ':!*.dxf' && git diff --cached --quiet && exit 0; git commit -m \"auto: code update $(date '+%Y-%m-%d %H:%M')\" && git push origin main 2>/dev/null || true",
+            "statusMessage": "Pushing changes to GitHub...",
+            "async": true
+          }
+        ]
+      }
+    ]
+  }
+}

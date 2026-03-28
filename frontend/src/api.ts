@@ -6,13 +6,15 @@ export interface GenerateResult {
 
 export async function generateCAD(
   description: string,
-  image?: File
+  image?: File,
+  token?: string
 ): Promise<GenerateResult> {
   const form = new FormData();
   form.append("description", description);
   if (image) form.append("image", image);
 
-  const res = await fetch("/generate", { method: "POST", body: form });
+  const headers: HeadersInit = token ? { Authorization: `Bearer ${token}` } : {};
+  const res = await fetch("/generate", { method: "POST", headers, body: form });
 
   if (!res.ok) {
     const err = await res.json().catch(() => ({ detail: res.statusText }));
