@@ -24,7 +24,16 @@
       "Bash(uvicorn main:app --reload --port 8000)",
       "Bash(start cmd:*)",
       "Skill(update-config)",
-      "Bash(python3:*)"
+      "Bash(python3:*)",
+      "Bash(curl:*)",
+      "Bash(python -c \"from dotenv import load_dotenv; import os; load_dotenv\\(''.env''\\); print\\(''USERNAME:'', repr\\(os.environ.get\\(''ADMIN_USERNAME''\\)\\)\\); print\\(''PASSWORD:'', repr\\(os.environ.get\\(''ADMIN_PASSWORD''\\)\\)\\)\")",
+      "Bash(netstat -ano)",
+      "Bash(findstr :8000)",
+      "Bash(taskkill /PID 32468 /F)",
+      "Bash(taskkill /PID 36880 /F)",
+      "Bash(cmd /c \"taskkill /PID 32468 /F\")",
+      "Bash(cmd /c \"taskkill /PID 36880 /F\")",
+      "Bash(cmd /c \"taskkill /F /IM uvicorn.exe\")"
     ]
   },
   "hooks": {

@@ -37,9 +37,9 @@ export default function App() {
     }
   };
 
-  if (!auth) {
-    return <LoginPage onLogin={setAuth} />;
-  }
+  // if (!auth) {
+  //   return <LoginPage onLogin={setAuth} />;
+  // }
 
   return (
     <div className="app">
