@@ -1,7 +1,6 @@
 import base64
-import subprocess
-import tempfile
 import os
+import google.generativeai as genai
 
 SYSTEM_PROMPT = """You are an expert CAD engineer. Your job is to write valid CadQuery Python code that generates a mechanical part based on the user's description.
 
@@ -17,31 +16,17 @@ Rules:
 
 
 def generate_cad_code(description: str, image_bytes: "bytes | None" = None) -> str:
-    prompt = SYSTEM_PROMPT + "\n\nUser request: " + description
+    genai.configure(api_key=os.environ["GEMINI_API_KEY"])
+    model = genai.GenerativeModel("gemini-1.5-flash")
 
-    CLAUDE = r"C:\Users\ziv1t\.local\bin\claude.exe"
-
-    cmd = [CLAUDE, "-p", prompt, "--output-format", "text"]
-
-    if image_bytes:
-        b64 = base64.standard_b64encode(image_bytes).decode("utf-8")
-        with tempfile.NamedTemporaryFile(suffix=".png", delete=False) as f:
-            f.write(image_bytes)
-            tmp_path = f.name
-        cmd = [CLAUDE, "-p", prompt, "--image", tmp_path, "--output-format", "text"]
-
-    result = subprocess.run(cmd, capture_output=True, text=True, timeout=120, env=os.environ.copy())
+    parts = [SYSTEM_PROMPT + "\n\nUser request: " + description]
 
     if image_bytes:
-        try:
-            os.unlink(tmp_path)
-        except Exception:
-            pass
+        parts.append({"mime_type": "image/png", "data": base64.standard_b64encode(image_bytes).decode()})
 
-    if result.returncode != 0:
-        raise RuntimeError(result.stderr.strip() or f"claude CLI failed (rc={result.returncode}, stdout={result.stdout[:200]})")
+    response = model.generate_content(parts)
+    code = response.text.strip()
 
-    code = result.stdout.strip()
     # Strip accidental markdown fences if model included them
     if code.startswith("```"):
         lines = code.splitlines()
