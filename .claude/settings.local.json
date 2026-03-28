@@ -34,7 +34,9 @@
       "Bash(cmd /c \"taskkill /PID 32468 /F\")",
       "Bash(cmd /c \"taskkill /PID 36880 /F\")",
       "Bash(cmd /c \"taskkill /F /IM uvicorn.exe\")",
-      "Bash(claude:*)"
+      "Bash(claude:*)",
+      "Bash(taskkill /F /IM python.exe)",
+      "Bash(taskkill:*)"
     ]
   },
   "hooks": {
