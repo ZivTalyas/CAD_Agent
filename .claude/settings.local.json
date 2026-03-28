@@ -39,7 +39,8 @@
       "Bash(taskkill:*)",
       "Bash(ls /c/Users/ziv1t/.local/bin/claude*)",
       "Bash(ls /c/Users/ziv1t/AppData/Local/Programs/claude*)",
-      "Bash(/c/Users/ziv1t/.local/bin/claude.exe -p \"say hi\" --output-format text 2>&1)"
+      "Bash(/c/Users/ziv1t/.local/bin/claude.exe -p \"say hi\" --output-format text 2>&1)",
+      "Bash(.venv/Scripts/pip install:*)"
     ]
   },
   "hooks": {
