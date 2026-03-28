@@ -30,7 +30,7 @@ def generate_cad_code(description: str, image_bytes: "bytes | None" = None) -> s
             tmp_path = f.name
         cmd = [CLAUDE, "-p", prompt, "--image", tmp_path, "--output-format", "text"]
 
-    result = subprocess.run(cmd, capture_output=True, text=True, timeout=120)
+    result = subprocess.run(cmd, capture_output=True, text=True, timeout=120, env=os.environ.copy())
 
     if image_bytes:
         try:
@@ -39,7 +39,7 @@ def generate_cad_code(description: str, image_bytes: "bytes | None" = None) -> s
             pass
 
     if result.returncode != 0:
-        raise RuntimeError(result.stderr.strip() or "claude CLI failed")
+        raise RuntimeError(result.stderr.strip() or f"claude CLI failed (rc={result.returncode}, stdout={result.stdout[:200]})")
 
     code = result.stdout.strip()
     # Strip accidental markdown fences if model included them
