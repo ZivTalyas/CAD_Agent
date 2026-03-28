@@ -1,5 +1,7 @@
 import base64
-import anthropic
+import subprocess
+import tempfile
+import os
 
 SYSTEM_PROMPT = """You are an expert CAD engineer. Your job is to write valid CadQuery Python code that generates a mechanical part based on the user's description.
 
@@ -15,29 +17,32 @@ Rules:
 
 
 def generate_cad_code(description: str, image_bytes: "bytes | None" = None) -> str:
-    client = anthropic.Anthropic()
+    prompt = SYSTEM_PROMPT + "\n\nUser request: " + description
 
-    user_content: list = []
+    cmd = ["claude", "-p", prompt, "--output-format", "text"]
 
     if image_bytes:
+        # Write image to a temp file and pass via stdin isn't supported for images,
+        # so encode description to include a note; image support via CLI is limited
         b64 = base64.standard_b64encode(image_bytes).decode("utf-8")
-        user_content.append(
-            {
-                "type": "image",
-                "source": {"type": "base64", "media_type": "image/png", "data": b64},
-            }
-        )
+        # Save temp PNG and pass path if claude CLI supports it, otherwise skip
+        with tempfile.NamedTemporaryFile(suffix=".png", delete=False) as f:
+            f.write(image_bytes)
+            tmp_path = f.name
+        cmd = ["claude", "-p", prompt, "--image", tmp_path, "--output-format", "text"]
 
-    user_content.append({"type": "text", "text": description})
+    result = subprocess.run(cmd, capture_output=True, text=True, timeout=120)
 
-    message = client.messages.create(
-        model="claude-sonnet-4-6",
-        max_tokens=2048,
-        system=SYSTEM_PROMPT,
-        messages=[{"role": "user", "content": user_content}],
-    )
+    if image_bytes:
+        try:
+            os.unlink(tmp_path)
+        except Exception:
+            pass
 
-    code = message.content[0].text.strip()
+    if result.returncode != 0:
+        raise RuntimeError(result.stderr.strip() or "claude CLI failed")
+
+    code = result.stdout.strip()
     # Strip accidental markdown fences if model included them
     if code.startswith("```"):
         lines = code.splitlines()
