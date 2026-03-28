@@ -36,7 +36,9 @@
       "Bash(cmd /c \"taskkill /F /IM uvicorn.exe\")",
       "Bash(claude:*)",
       "Bash(taskkill /F /IM python.exe)",
-      "Bash(taskkill:*)"
+      "Bash(taskkill:*)",
+      "Bash(ls /c/Users/ziv1t/.local/bin/claude*)",
+      "Bash(ls /c/Users/ziv1t/AppData/Local/Programs/claude*)"
     ]
   },
   "hooks": {

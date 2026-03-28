@@ -19,17 +19,16 @@ Rules:
 def generate_cad_code(description: str, image_bytes: "bytes | None" = None) -> str:
     prompt = SYSTEM_PROMPT + "\n\nUser request: " + description
 
-    cmd = ["claude", "-p", prompt, "--output-format", "text"]
+    CLAUDE = r"C:\Users\ziv1t\.local\bin\claude.exe"
+
+    cmd = [CLAUDE, "-p", prompt, "--output-format", "text"]
 
     if image_bytes:
-        # Write image to a temp file and pass via stdin isn't supported for images,
-        # so encode description to include a note; image support via CLI is limited
         b64 = base64.standard_b64encode(image_bytes).decode("utf-8")
-        # Save temp PNG and pass path if claude CLI supports it, otherwise skip
         with tempfile.NamedTemporaryFile(suffix=".png", delete=False) as f:
             f.write(image_bytes)
             tmp_path = f.name
-        cmd = ["claude", "-p", prompt, "--image", tmp_path, "--output-format", "text"]
+        cmd = [CLAUDE, "-p", prompt, "--image", tmp_path, "--output-format", "text"]
 
     result = subprocess.run(cmd, capture_output=True, text=True, timeout=120)
 
